@@ -1,17 +1,27 @@
 
-
-const Navbar = () => {
+import { Link } from "react-router-dom";
+const Navbar = ({user}) => {
     const url="https://avatars.githubusercontent.com/u/81777768?s=96&v=4";
+
+    const logout = ()=>{
+      window.open("http://localhost:5000/auth/logout", "_self");
+      // window.open("http://localhost:5000/auth/logout","_self");
+    }
     return(
         <div className="navbar">
-           <spam className="logo">Sample App</spam>
+           <span className="logo"><Link className="Link" to="/">Sample App</Link></span>
+           {
+              user ? (
+      
               <ul className="list">
                  <li className="listItem">
-                    <img src={url} alt="" className="avatar"/>
+                    <img src={user.photos[0].value} alt="" className="avatar"/>
                  </li>
-                 <li className="listItem">Mayank</li>
-                 <li className="lsitItem">Logout</li>
+                 <li className="listItem">{user.displayName}</li>
+                 <li className="listItem" onClick={logout}>Logout</li>
               </ul>
+              ) : (<Link className="link" to="/login">Login</Link>)
+           }
         </div>
     )
 }

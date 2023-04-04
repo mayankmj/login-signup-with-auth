@@ -1,24 +1,51 @@
-import logo from './logo.svg';
 import './App.css';
-
+import Navbar from './components/Navbar';
+import Post from './pages/Post';
+import Login from './pages/Login';
+import Home from './pages/Home'
+import {BrowserRouter , Routes , Route , Link , Navigate} from "react-router-dom";
+import { useEffect, useState } from 'react';
 function App() {
+  const [user,setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = () => {
+      fetch("http://localhost:5000/auth/login/success", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) return response.json();
+          throw new Error("authentication has been failed!");
+        })
+        .then((resObject) => {
+          setUser(resObject.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, []);
+
+  console.log(user);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+    <>
+      <Navbar user={user}/>
+      <Routes>
+         <Route path="/" element={<Home/>} />
+         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+         <Route path="/post/:id" element={user ? <Post /> : <Login />} />
+
+      </Routes>
+    </>
+    </BrowserRouter>
   );
 }
 
