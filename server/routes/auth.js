@@ -2,10 +2,12 @@
 // const passport = require("passport")
 import  express  from "express";
 import passport from "passport"
-
+import dotenv from 'dotenv'
 const router = express.Router();
 
-const CLIENT_URL="http://localhost:3000/"
+dotenv.config();
+
+const Client_Url=process.env.CLIENT_URL
 
 router.get("/login/failed" ,(req,res) =>{
     res.status(401).json({
@@ -27,14 +29,14 @@ router.get("/login/success" ,(req,res) =>{
 
 router.get("/logout", (req,res) => {
     req.logout();
-    res.redirect(CLIENT_URL)
+    res.redirect(Client_Url)
 })
 
 
 router.get("/google",passport.authenticate("google",{scope : ["profile"]}));
 
 router.get("/google/callback",passport.authenticate("google",{
-    successRedirect: CLIENT_URL,
+    successRedirect: Client_Url,
     failureRedirect: "/login/falied"
 }))
 
@@ -42,7 +44,7 @@ router.get("/google/callback",passport.authenticate("google",{
 router.get("/github",passport.authenticate("github",{scope : ["profile"]}));
 
 router.get("/github/callback",passport.authenticate("github",{
-    successRedirect: CLIENT_URL,
+    successRedirect: Client_Url,
     failureRedirect: "/login/falied"
 }))
 

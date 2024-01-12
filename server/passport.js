@@ -1,7 +1,5 @@
-// const passport = require('passport');
 import passport from 'passport';
 import dotenv from 'dotenv'
-// var GoogleStrategy = require('passport-google-oauth20').Strategy;
 import GoogleStrategy from 'passport-google-oauth20'
 GoogleStrategy.Strategy
 
